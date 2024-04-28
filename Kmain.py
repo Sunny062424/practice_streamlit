@@ -1,4 +1,3 @@
-
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate
@@ -18,15 +17,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough
 
 load_dotenv()
-
-with st.sidebar:
-    aws_access_key_id = st.text_input("AWS Access Key Id", placeholder="access key", type="password")
-    aws_secret_access_key = st.text_input("AWS Secret Access Key", placeholder="secret", type="password")
-
-boto_session = boto3.session.Session(
-    aws_access_key_id=aws_access_key_id,
-    aws_secret_access_key=aws_secret_access_key)
-        
+       
 #LLM부터 응답 받아오기(get response)
 def get_response(query, chat_history):
     template = """
@@ -41,7 +32,7 @@ def get_response(query, chat_history):
     
     #prompt = ChatPromptTemplate.from_template(template)
 
-    bedrock_runtime = boto_session.client(
+    bedrock_runtime = boto3.client(
         service_name="bedrock-runtime",
         region_name="us-east-1",
     )
@@ -123,9 +114,7 @@ for message in st.session_state.chat_history:
 user_query = st.chat_input("질문을 입력해주세요. 예시: '카카오계정 관리 약관에 대해 설명해줘' ")
 if user_query is not None and user_query != "":
     st.session_state.chat_history.append(HumanMessage(user_query))
-    if not aws_access_key_id and not aws_secret_access_key:
-        st.info("Access Key Id or Secret Access Key are not provided yet !")
-        st.stop()
+
     with st.chat_message("Human"):
         st.markdown(user_query)
     
