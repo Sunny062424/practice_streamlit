@@ -97,8 +97,8 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 st.set_page_config(page_title="RAG_DEMO", page_icon="🦜⛓️")
-st.title("카카오계정 관리 약관에 대해 설명해줘")
 st.title("_:orange[KAKAO]_ 계정 약관 QA BOT")
+st.caption("🚀 A streamlit chatbot powered by AWS Bedrock Claude LLM")
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_histroy = []
