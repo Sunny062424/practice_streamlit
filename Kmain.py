@@ -17,6 +17,8 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough
 import os
 load_dotenv()
+
+openai_api_key = st.secrets["openai_api_key"]
 aws_access_key_id = st.secrets["aws_access_key_id"]
 aws_secret_access_key = st.secrets["aws_secret_access_key"]
 
@@ -83,7 +85,7 @@ def format_docs(docs):
 
 def load_vector_db():
     # load db
-    embeddings_model = OpenAIEmbeddings()
+    embeddings_model = OpenAIEmbeddings(openai_api_key=openai_api_key)
     vectorestore = FAISS.load_local('./db/faiss', embeddings_model, allow_dangerous_deserialization=True )
     #vectorestore = FAISS.load_local('./db/faiss', embeddings_model, allow_dangerous_deserialization=True )
     retriever = vectorestore.as_retriever()
