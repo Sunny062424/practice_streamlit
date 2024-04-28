@@ -123,7 +123,9 @@ for message in st.session_state.chat_history:
 user_query = st.chat_input("질문을 입력해주세요. 예시: '카카오계정 관리 약관에 대해 설명해줘' ")
 if user_query is not None and user_query != "":
     st.session_state.chat_history.append(HumanMessage(user_query))
-
+    if not aws_access_key_id and not aws_secret_access_key:
+        st.info("Access Key Id or Secret Access Key are not provided yet !")
+        st.stop()
     with st.chat_message("Human"):
         st.markdown(user_query)
     
