@@ -18,6 +18,14 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough
 
 load_dotenv()
+
+with st.sidebar:
+    aws_access_key_id = st.text_input("AWS Access Key Id", placeholder="access key", type="password")
+    aws_secret_access_key = st.text_input("AWS Secret Access Key", placeholder="secret", type="password")
+
+boto_session = boto3.session.Session(
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
         
 #LLM부터 응답 받아오기(get response)
 def get_response(query, chat_history):
@@ -33,7 +41,7 @@ def get_response(query, chat_history):
     
     #prompt = ChatPromptTemplate.from_template(template)
 
-    bedrock_runtime = boto3.client(
+    bedrock_runtime = boto_session.client(
         service_name="bedrock-runtime",
         region_name="us-east-1",
     )
