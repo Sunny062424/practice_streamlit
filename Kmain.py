@@ -15,9 +15,15 @@ from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough
-
+import os
 load_dotenv()
-       
+aws_access_key_id = st.secrets["aws_access_key_id"]
+aws_secret_access_key = st.secrets["aws_secret_access_key"]
+
+boto_session = boto3.session.Session(
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key)
+
 #LLM부터 응답 받아오기(get response)
 def get_response(query, chat_history):
     template = """
@@ -32,7 +38,7 @@ def get_response(query, chat_history):
     
     #prompt = ChatPromptTemplate.from_template(template)
 
-    bedrock_runtime = boto3.client(
+    bedrock_runtime = boto_session.client(
         service_name="bedrock-runtime",
         region_name="us-east-1",
     )
@@ -129,4 +135,3 @@ if user_query is not None and user_query != "":
     st.session_state.chat_history.append(AIMessage(content=ai_response))
     st.markdown(ai_response)
     print('endthen : ', st.session_state.chat_history)
-
